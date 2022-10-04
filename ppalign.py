@@ -136,6 +136,9 @@ def align_archives(metafile, initial_guess, fit_dm=True, tscrunch=False,
                         fscrunch=False, rm_baseline=rm_baseline,
                         flux_prof=False, refresh_arch=False, return_arch=False,
                         quiet=load_quiet)
+                #print(data.SNRs)
+                #print(data.SNRs[np.isnan(data.SNRs)],data.prof_SNR)
+                #print(len(data.SNRs[np.isnan(data.SNRs)]))
 
             except RuntimeError:
                 if not quiet:
@@ -161,6 +164,22 @@ def align_archives(metafile, initial_guess, fit_dm=True, tscrunch=False,
                           (datafiles[ifile], data.prof_SNR, SNR_cutoff))
                 skip_these.append(datafiles[ifile])
                 continue
+            if np.isnan(data.prof_SNR):
+                print("Profile has nan SNR, must skip")
+                skip_these.append(datafiles[ifile])
+                continue
+            if len(data.SNRs[np.isnan(data.SNRs)]) > 10:
+                print("More than 10 frequency channels with nan SNR")
+                skip_these.append(datafiles[ifile])
+                continue
+            if len(data.SNRs[np.isnan(data.SNRs)]) != 0:
+                print("This file has %s frequency channels with a nan SNR" % len(data.SNRs[np.isnan(data.SNRs)]))
+                print(datafiles[ifile])
+                for isub in data.ok_isubs:
+                    for ipol in range(data.npol):
+                        data.ok_ichans[isub] = data.ok_ichans[isub][~np.isnan(data.SNRs[isub,ipol][np.array(data.ok_ichans[isub])])]
+                        print(data.ok_ichans[isub])
+
             try:
                 freq_diffs = data.freqs - model_data.freqs
                 if freq_diffs.min() == freq_diffs.max() == 0.0:
@@ -180,7 +199,9 @@ def align_archives(metafile, initial_guess, fit_dm=True, tscrunch=False,
                     model_ichans = []
                     for ichan in ichans:
                         data_freq = data.freqs[isub, ichan]
-                        imin = np.argmin(abs(model_data.freqs[0] - data_freq))
+                     #Fix to ensure that channels zeroed out in the model_data aren't chosen to be aligned with data
+                        imin = model_data.ok_ichans[0][np.argmin((abs(model_data.freqs[0][model_data.ok_ichans[0]]-data_freq)))] 
+                       # imin = np.argmin(abs(model_data.freqs[0] - data_freq))
                         model_ichans.append(imin)
                     model_ichans = np.array(model_ichans)
                 port = data.subints[isub, 0, ichans]

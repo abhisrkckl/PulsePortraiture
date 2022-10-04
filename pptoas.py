@@ -274,6 +274,23 @@ class GetTOAs(object):
                                      pscrunch=True, fscrunch=False,
                                      rm_baseline=rm_baseline, flux_prof=False,
                                      refresh_arch=False, return_arch=False, quiet=quiet)
+                #print(data.prof_SNR)
+                if np.isnan(data.prof_SNR) or (data.prof_SNR == 0.0):
+                    print("Profile has a nan or zero  snr, must skip")
+                    continue 
+                if len(data.SNRs[np.isnan(data.SNRs)]) > 10:
+                    print("More than 10 frequency channels with nan SNR. Skipping it")
+                    continue
+                if len(data.SNRs[np.isnan(data.SNRs)]) > 0:
+                    print("This file has %s frequency channels with a nan SNR" % len(data.SNRs[np.isnan(data.SNRs)]))
+                #print(np.where(np.isnan(data.SNRs) == True)[2])
+                    print(datafile)
+                    for isub in data.ok_isubs:
+                        for ipol in range(data.npol):
+                        #print(np.shape(data.SNRs[isub,ipol]))
+                        #print(data.ok_ichans[isub])
+                            data.ok_ichans[isub] = data.ok_ichans[isub][~np.isnan(data.SNRs[isub,ipol][np.array(data.ok_ichans[isub])])]
+                            #print(data.ok_ichans[isub])
                 if not len(data.ok_isubs):
                     if not quiet:
                         print("No subints to fit for %s.  Skipping it." % \
