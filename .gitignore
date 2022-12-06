@@ -19,3 +19,4 @@ pplib_dist.py*
 MCtests/
 developments
 install.cmd
+*.egg-info
