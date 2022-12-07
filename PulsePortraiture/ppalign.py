@@ -24,7 +24,7 @@ from builtins import map
 from builtins import range
 
 from past.utils import old_div
-from pptoas import *
+from .pptoas import *
 
 
 def psradd_archives(metafile, outfile, palign=False):
