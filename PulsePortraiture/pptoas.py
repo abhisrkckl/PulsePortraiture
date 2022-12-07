@@ -23,7 +23,7 @@ from builtins import zip
 
 from past.utils import old_div
 from types import SimpleNamespace
-from .pptoaslib import *
+from pptoaslib import *
 
 # cfitsio defines a maximum number of files (NMAXFILES) that can be opened in
 # the header file fitsio2.h.  Without calling unload() with PSRCHIVE, which

@@ -18,7 +18,7 @@ from __future__ import print_function
 from builtins import map
 from builtins import range
 
-from .pptoas import *
+from pptoas import *
 
 
 def get_zap_channels(data, nstd=3):

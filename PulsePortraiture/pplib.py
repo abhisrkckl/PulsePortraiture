@@ -51,7 +51,7 @@ except ImportError:
 import psrchive as pr
 import matplotlib.gridspec as gs
 import matplotlib.pyplot as plt
-from .telescope_codes import telescope_code_dict
+from telescope_codes import telescope_code_dict
 
 ############
 # settings #

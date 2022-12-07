@@ -7,7 +7,7 @@ from builtins import str
 from builtins import zip
 
 from past.utils import old_div
-from .pplib import *
+from pplib import *
 from scipy.special import erf
 
 

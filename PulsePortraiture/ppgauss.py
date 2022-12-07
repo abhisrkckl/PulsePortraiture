@@ -21,7 +21,7 @@ from builtins import range
 
 from matplotlib.patches import Rectangle
 from past.utils import old_div
-from .pplib import *
+from pplib import *
 
 
 class DataPortrait(DataPortrait):
